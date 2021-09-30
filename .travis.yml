@@ -1,0 +1,19 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t carl1984a0/react-test -f ./client/Dockerfile.dev ./client
+script:
+  - docker run -e CI=true carl1984a0/react-test yarn test
+after_success:
+  - docker build -t carl1984a0/m-client ./client
+  - docker build -t carl1984a0/m-nginx ./nginx
+  - docker build -t carl1984a0/m-server ./server
+  - docker build -t carl1984a0/m-worker ./worker
+  #Login to Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #Now push to docker hub
+  - docker push carl1984a0/m-client
+  - docker push carl1984a0/m-nginx
+  - docker push carl1984a0/m-server
+  - docker push carl1984a0/m-worker
