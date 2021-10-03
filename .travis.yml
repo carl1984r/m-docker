@@ -17,3 +17,14 @@ after_success:
   - docker push carl1984a0/m-nginx
   - docker push carl1984a0/m-server
   - docker push carl1984a0/m-worker
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-2'
+  app: 'm-docker'
+  env: 'Mdocker-env'
+  bucket_name: 'elasticbeanstalk-us-east-2-170140417022'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
